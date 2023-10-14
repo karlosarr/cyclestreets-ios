@@ -14,6 +14,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      
+      - uses: actions/cache@v3.3.2
+        id: cache
+        with:
+          path: Pods
+          key: ${{ runner.os }}-${{ hashFiles('**/Podfile.lock') }}
       - name: Pod install
         run: |
           pod install
