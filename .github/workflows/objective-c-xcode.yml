@@ -14,13 +14,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      
       - uses: actions/cache@v3.3.2
-        id: cache
+        id: cocoapods-cache
         with:
           path: Pods
-          key: ${{ runner.os }}-${{ hashFiles('**/Podfile.lock') }}
-      - name: Pod install
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+      - name: CocoaPods
+        if: steps.cocoapods-cache.outputs.cache-hit != 'true'
         run: |
           pod install
       - name: Version Mac
